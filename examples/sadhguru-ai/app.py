@@ -32,7 +32,7 @@ def add_data_to_app():
     url = "https://gist.githubusercontent.com/imukerji/58bafd0a7d655dbb47d9a158a237fb49/raw/840013eb832d86ab8fd3862b1810f6d7f0bfc84c/gistfile1.csv"  # noqa:E501
     response = requests.get(url)
     csv_file = StringIO(response.text)
-  for row in csv.reader(csv_file):
+for row in csv.reader(csv_file):
     if row and row[0] != "url":
         try:
             app.add(row[0], data_type="web_page")
