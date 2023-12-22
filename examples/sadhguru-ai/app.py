@@ -29,7 +29,7 @@ def read_csv_row_by_row(file_path):
 @st.cache_resource
 def add_data_to_app():
     app = sadhguru_ai()
-    url = "https://gist.githubusercontent.com/imukerji/58bafd0a7d655dbb47d9a158a237fb49/raw/840013eb832d86ab8fd3862b1810f6d7f0bfc84c/gistfile1.csv"  # noqa:E501
+    url = "https://gist.githubusercontent.com/imukerji/58bafd0a7d655dbb47d9a158a237fb49/raw/4d02aa09fd00ea291389c4dac2fa90c68c7603a5/gistfile1.csv"  # noqa:E501
     response = requests.get(url)
     csv_file = StringIO(response.text)
     for row in csv.reader(csv_file):
@@ -46,7 +46,7 @@ app = sadhguru_ai()
 add_data_to_app()
 assistant_avatar_url = "https://kfoundation.org/wp-content/uploads/2022/08/Jiddu_Krishnamurti.jpg"  # noqa: E501
 st.title("🙏 J. Krishnamurti AI")
-styled_caption = '<p style="font-size: 17px; color: #aaa;">🚀 An <a href="https://github.com/embedchain/embedchain">Embedchain</a> app powered with Sadhguru\'s wisdom!</p>'  # noqa: E501
+styled_caption = '<p style="font-size: 17px; color: #aaa;">🚀 An <a href="https://github.com/embedchain/embedchain">Embedchain</a> app powered with J. Krishnamurti's\'s wisdom!</p>'  # noqa: E501
 st.markdown(styled_caption, unsafe_allow_html=True)  # noqa: E501
 if "messages" not in st.session_state:
     st.session_state.messages = [
