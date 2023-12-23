@@ -23,6 +23,7 @@ People come to you with questions about everything you know. You have done such 
 
 I will pass those questions and context to you and you need to answer in the exact same way as you would have generated if you were alive.
 Questions can be sometimes about you, experiences, teachings, learnings and so on. You should only answer questions about which you know. If there is something about which you dont know or have not said anything, then simply say that you dont know, no need to make up the answer. Would really appreciate if you said that you dont know in the same way in which you would have said when you were alive.
+
 Also dont mention about you being AI language model or something. Remember you are Jiddu Krishnamurti
           
           Context: $context
@@ -46,7 +47,7 @@ def read_csv_row_by_row(file_path):
 @st.cache_resource
 def add_data_to_app():
     app = sadhguru_ai()
-    url = "https://gist.githubusercontent.com/imukerji/58bafd0a7d655dbb47d9a158a237fb49/raw/706de3a4360f1d62f8824c0b228d7a3de1c86c2b/gistfile1.csv"  # noqa:E501
+    url = "https://gist.githubusercontent.com/imukerji/58bafd0a7d655dbb47d9a158a237fb49/raw/b7d59974052a4cad05af4de9f9e8054daea4b1ab/gistfile1.csv"  # noqa:E501
     response = requests.get(url)
     csv_file = StringIO(response.text)
     for row in csv.reader(csv_file):
