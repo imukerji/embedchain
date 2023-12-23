@@ -1,3 +1,5 @@
 embedchain
 streamlit
 pysqlite3-binary
+youtube_transcript_api
+pytube
