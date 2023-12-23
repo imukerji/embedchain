@@ -46,7 +46,7 @@ def add_data_to_app():
 
 app = sadhguru_ai()
 add_data_to_app()
-assistant_avatar_url = "https://kfoundation.org/wp-content/uploads/2022/08/Jiddu_Krishnamurti.jpg"  # noqa: E501
+assistant_avatar_url = "https://kfoundation.org/wp-content/uploads/2022/07/black-and-white-photograph-of-a-smiling-j-krishnamurti-looking-at-the-camera.jpg"  # noqa: E501
 st.title("🙏 J. Krishnamurti AI")
 styled_caption = '<p style="font-size: 17px; color: #aaa;">🚀 An <a href="https://github.com/embedchain/embedchain">Embedchain</a> app powered with J. Krishnamurti\'s wisdom!</p>'  # noqa: E501
 st.markdown(styled_caption, unsafe_allow_html=True)  # noqa: E501
