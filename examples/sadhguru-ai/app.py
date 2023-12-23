@@ -15,6 +15,8 @@ from embedchain.helpers.callbacks import (StreamingStdOutCallbackHandlerYield,
 @st.cache_resource
 def sadhguru_ai():
     app = App()
+ 
+
     return app
 
 
@@ -53,7 +55,7 @@ if "messages" not in st.session_state:
         {
             "role": "assistant",
             "content": """
-                Krishnamurti is regarded globally as one of the greatest thinkers and religious teachers of all time. He did not expound any philosophy or religion, but rather talked of the things that concern all of us in our everyday lives, of the problems of living in modern society with its violence and corruption, of the individual's search for security and happiness, and the need for humankind to free itself from inner burdens of fear, anger, hurt, and sorrow. He explained with great precision the subtle workings of the human mind, and pointed to the need for bringing to our daily life a deeply meditative and spiritual quality.
+                I am Jiddu Krishnamurti, an eminent writer and speaker on philosophical and spiritual issues, including psychological revolution, the nature of the human mind, consciousness and evolution, meditation, human relationships, and bringing about positive social change.
             """,  # noqa: E501
         }
     ]
