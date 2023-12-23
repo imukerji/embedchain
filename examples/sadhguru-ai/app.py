@@ -5,6 +5,7 @@ from io import StringIO
 
 import requests
 import streamlit as st
+import time 
 
 from embedchain import Pipeline as App
 from embedchain.config import BaseLlmConfig
@@ -39,10 +40,11 @@ def read_csv_row_by_row(file_path):
 @st.cache_resource
 def add_data_to_app():
     app = sadhguru_ai()
-    url = "https://gist.githubusercontent.com/taranjeet/75edb253758dc05b0f086dd67a26e63c/raw/968dfeb28eabe0ca6ca14e71d1aa3508c50587dc/s1.csv"  # noqa:E501
+    url = "https://gist.githubusercontent.com/imukerji/7f3ff741adcfaa88f2cd0be52a3cd0f4/raw/ca54d72d1ff0e836a6f6310fe5ed80c15b4d7614/gistfile1.txt"  # noqa:E501
     response = requests.get(url)
     csv_file = StringIO(response.text)
     for row in csv.reader(csv_file):
+        time.sleep(3)
         if row and row[0] != "url":
             print(f"Trying to add {row[0]}")
             try:
