@@ -46,16 +46,15 @@ def read_csv_row_by_row(file_path):
 @st.cache_resource
 def add_data_to_app():
     app = sadhguru_ai()
-    url = "https://gist.githubusercontent.com/imukerji/58bafd0a7d655dbb47d9a158a237fb49/raw/4d02aa09fd00ea291389c4dac2fa90c68c7603a5/gistfile1.csv"  # noqa:E501
+    url = "https://gist.githubusercontent.com/imukerji/58bafd0a7d655dbb47d9a158a237fb49/raw/706de3a4360f1d62f8824c0b228d7a3de1c86c2b/gistfile1.csv"  # noqa:E501
     response = requests.get(url)
     csv_file = StringIO(response.text)
     for row in csv.reader(csv_file):
         if row and row[0] != "url":
             try:
-                app.add(row[0], data_type="web_page")
+                app.add(row[0], data_type=row[1])
             except Exception as e:
                 print(f"Failed to add {row[0]} error {e}")
-
 
 
 
