@@ -41,7 +41,7 @@ def read_csv_row_by_row(file_path):
 @st.cache_resource
 def add_data_to_app():
     app = sadhguru_ai()
-    url = "https://gist.githubusercontent.com/taranjeet/75edb253758dc05b0f086dd67a26e63c/raw/968dfeb28eabe0ca6ca14e71d1aa3508c50587dc/s1.csv"  # noqa:E501
+    url = "https://gist.githubusercontent.com/imukerji/ca01ae8144c7bd4b943aa81566e29bc8/raw/ae53ee229b5959dd2bcd9e0b29db95df118b7d53/jidduweb.csv"  # noqa:E501
     response = requests.get(url)
     csv_file = StringIO(response.text)
     for row in csv.reader(csv_file):
