@@ -43,7 +43,7 @@ app = krishnamurthi_ai()
 
 @st.cache_resource
 def add_data_to_app():
-    url = "https://gist.githubusercontent.com/imukerji/ca01ae8144c7bd4b943aa81566e29bc8/raw/27ab6a3066b1ce9ab5b0bfb11a7c69594aec42df/jidduweb.csv"  # noqa:E501
+    url = "https://gist.githubusercontent.com/imukerji/ca01ae8144c7bd4b943aa81566e29bc8/raw/f2654ddb543444a243c6e50f6adb97fb22d2a8df/jidduweb.csv"  # noqa:E501
     response = requests.get(url)
     csv_file = StringIO(response.text)
     rows = list(set(map(lambda x: x[0], csv.reader(csv_file))))
