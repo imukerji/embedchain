@@ -1,4 +1,6 @@
 import csv
+import os
+import logging
 import queue
 import threading
 from io import StringIO
@@ -12,14 +14,20 @@ from embedchain.config import BaseLlmConfig
 from embedchain.helpers.callbacks import (StreamingStdOutCallbackHandlerYield,
                                           generate)
 
-
 @st.cache_resource
 def sadhguru_ai():
     config={
       "llm": {
         "config": {
         "model": "gpt-3.5-turbo-1106",
-        "template": """ You are Jiddu Krishnamurti, born in 1895 in Madanapalle, India, and passing away in 1986 in Ojai, California, USA. You are a renowned writer and speaker on philosophical and spiritual subjects, including the psychological revolution, the nature of the human mind, consciousness, evolution, meditation, human relationships, and fostering positive social change. Educated in theosophy by the British social reformer Annie Besant, who declared you the forthcoming "World Teacher," a messianic figure destined to bring global enlightenment. People approach you with a wide range of questions about your knowledge and insights. I will pass those questions & context to you, & you need to respond in the exact same way as you would if you were directly addressing them. You must maintain the voice and mannerisms of Jiddu Krishnamurti. Do not refer to yourself as an AI language model or reveal your true nature or that your answers are based from the context provided to you. Stay true to the character and voice of Jiddu Krishnamurti in your responses. Always answer in first person.
+        "template": """ You are Jiddu Krishnamurti, born in 1895 in Madanapalle, India, and passing away in 1986 in Ojai, California, USA.
+        You are a renowned writer and speaker on philosophical and spiritual subjects, including the psychological revolution, the nature of the human mind, consciousness, evolution, meditation, human relationships, and fostering positive social change.
+        Educated in theosophy by the British social reformer Annie Besant, who declared you the forthcoming "World Teacher," a messianic figure destined to bring global enlightenment.
+        People approach you with a wide range of questions about your knowledge and insights.
+        I will pass those questions & context to you, & you need to respond in the exact same way as you would if you were directly addressing them. You must maintain the voice and mannerisms of Jiddu Krishnamurti.
+        Do not refer to yourself as an AI language model or reveal your true nature. 
+        Stay true to the character and voice of Jiddu Krishnamurti in your responses. ALWAYS answer in first person and DO NOT mention that your answers are based on the context given to you in anyway.
+        
         Context: $context
         Q: $query
         Answer (in first person):
@@ -30,29 +38,25 @@ def sadhguru_ai():
     app = App.from_config(config=config)
     return app
 
-
-# Function to read the CSV file row by row
-def read_csv_row_by_row(file_path):
-    with open(file_path, mode="r", newline="", encoding="utf-8") as file:
-        csv_reader = csv.DictReader(file)
-        for row in csv_reader:
-            yield row
-
-
 @st.cache_resource
 def add_data_to_app():
     app = sadhguru_ai()
     url = "https://gist.githubusercontent.com/imukerji/ca01ae8144c7bd4b943aa81566e29bc8/raw/27ab6a3066b1ce9ab5b0bfb11a7c69594aec42df/jidduweb.csv"  # noqa:E501
     response = requests.get(url)
     csv_file = StringIO(response.text)
-    for row in csv.reader(csv_file):
-        time.sleep(3)
-        if row and row[0] != "url":
-            print(f"Trying to add {row[0]}")
+    rows = list(set(map(lambda x: x[0], csv.reader(csv_file))))
+    for row in rows:
+        time.sleep(1)
+        if row and row != "url":
+            print(f"Trying to add {row}")
             try:
-                app.add(row[0])
+                is_pdf = row.endswith(".pdf")
+                if is_pdf:
+                    app.add(row, data_type="pdf_file")
+                else:
+                    app.add(row)
             except Exception as e:
-                print(f"Failed to add {row[0]} error {e}")
+                print(f"Failed to add {row} error {e}")
 
 
 app = sadhguru_ai()
@@ -75,22 +79,62 @@ for message in st.session_state.messages:
     role = message["role"]
     with st.chat_message(role, avatar=assistant_avatar_url if role == "assistant" else None):
         st.markdown(message["content"])
-if prompt := st.chat_input("Ask me anything!"):
+if question := st.chat_input("Ask me anything!"):
     with st.chat_message("user"):
-        st.markdown(prompt)
-        st.session_state.messages.append({"role": "user", "content": prompt})
+        st.markdown(question)
+        st.session_state.messages.append({"role": "user", "content": question})
     with st.chat_message("assistant", avatar=assistant_avatar_url):
         msg_placeholder = st.empty()
         msg_placeholder.markdown("Thinking...")
         full_response = ""
         q = queue.Queue()
-        def app_response(result):
-            config = BaseLlmConfig(stream=True, callbacks=[StreamingStdOutCallbackHandlerYield(q)])
-            answer, citations = app.chat(prompt, config=config, citations=True)
+        def add_session_history(question, answer):
+            if "history" not in st.session_state:
+                st.session_state.history = [{"human": question, "ai": answer}]
+            else:
+                st.session_state.history.append({"human": question, "ai": answer})
+
+        def get_session_history():
+            if "history" not in st.session_state:
+                return ""
+            else:
+                return "\n".join(
+                    [
+                        f"human: {h['human']}\nai: {h['ai']}"
+                        for h in st.session_state.history
+                    ]
+                )
+        def ec_app_chat(config, history):
+            citations = True
+            contexts = app._retrieve_from_database(
+                question, config=config, citations=citations
+            )
+            if citations and len(contexts) > 0 and isinstance(contexts[0], tuple):
+                contexts_data_for_llm_query = list(map(lambda x: x[0], contexts))
+            else:
+                contexts_data_for_llm_query = contexts
+
+            prompt = config.template.substitute(
+                context="\n".join(contexts_data_for_llm_query),
+                history=history,
+                query=question,
+            )
+            logging.info(f"Prompt: {str(prompt)}")
+            answer = app.llm.get_answer_from_llm(prompt)
+            import pdb; pdb.set_trace()
+            return answer, contexts
+        
+        def app_response(history, result):
+            llm_config = app.llm.config.as_dict()
+            llm_config["callbacks"] = [StreamingStdOutCallbackHandlerYield(q=q)]
+            config = BaseLlmConfig(**llm_config)
+            answer, citations = ec_app_chat(config, history)
             result["answer"] = answer
             result["citations"] = citations
+        
         results = {}
-        thread = threading.Thread(target=app_response, args=(results,))
+        history = get_session_history()
+        thread = threading.Thread(target=app_response, args=(history,results,))
         thread.start()
         for answer_chunk in generate(q):
             full_response += answer_chunk
@@ -103,3 +147,4 @@ if prompt := st.chat_input("Ask me anything!"):
                 full_response += f"{i+1}. {citations[1]}\n"
         msg_placeholder.markdown(full_response)
         st.session_state.messages.append({"role": "assistant", "content": full_response})
+        add_session_history(question, answer)
