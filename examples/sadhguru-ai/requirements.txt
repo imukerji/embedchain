@@ -1,4 +1,4 @@
-embedchain
+git+https://github.com/imukerji/embedchain.git
 streamlit
 pysqlite3-binary
 youtube_transcript_api
