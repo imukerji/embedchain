@@ -13,8 +13,6 @@ from embedchain import Pipeline as App
 from embedchain.config import BaseLlmConfig
 from embedchain.helpers.callbacks import (StreamingStdOutCallbackHandlerYield,
                                           generate)
-import os
-os.environ["OPENAI_API_KEY"] = "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"
 
 @st.cache_resource
 def krishnamurthi_ai():
