@@ -15,7 +15,7 @@ from embedchain.helpers.callbacks import (StreamingStdOutCallbackHandlerYield,
 
 @st.cache_resource
 def sadhguru_ai():
-  config={
+    config={
       "llm": {
         "config": {
         "model": "gpt-3.5-turbo-1106",
