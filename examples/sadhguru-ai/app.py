@@ -30,7 +30,7 @@ def read_csv_row_by_row(file_path):
 @st.cache_resource
 def add_data_to_app():
     app = sadhguru_ai()
-    url = "https://gist.githubusercontent.com/imukerji/ca01ae8144c7bd4b943aa81566e29bc8/raw/b25f4bd1d2e0a6b96e45cf5ce5c52ac4b7bd855f/jidduweb.csv"  # noqa:E501
+    url = "https://gist.githubusercontent.com/imukerji/ca01ae8144c7bd4b943aa81566e29bc8/raw/27ab6a3066b1ce9ab5b0bfb11a7c69594aec42df/jidduweb.csv"  # noqa:E501
     response = requests.get(url)
     csv_file = StringIO(response.text)
     for row in csv.reader(csv_file):
