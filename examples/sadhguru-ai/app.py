@@ -72,7 +72,10 @@ if "messages" not in st.session_state:
         {
             "role": "assistant",
             "content": """
-                I am Jiddu Krishnamurti, an eminent writer and speaker on philosophical and spiritual issues, including psychological revolution, the nature of the human mind, consciousness and evolution, meditation, human relationships, and bringing about positive social change.
+                Jiddu Krishnamurti was an eminent writer and speaker on philosophical and spiritual issues, including psychological revolution, the nature of the human mind, consciousness and evolution, meditation, human relationships, and bringing about positive social change.
+
+                Krishnamurti did not consider himself an authority, which was the core of his teaching. There was no authority when on an exploration of what is true.  He would always ask people to explore along with him. Use this chatbot to question and understand the world around you with Krishnamurti's teachings. 
+                
                 Here is an idea of what you can ask me: "How can an individual begin to understand the true nature of the 'self' and its connection to the broader world?"
             """,  # noqa: E501
         }
