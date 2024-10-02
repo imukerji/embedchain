@@ -1,5 +1,6 @@
 git+https://github.com/imukerji/embedchain.git
-streamlit
-pysqlite3-binary
-youtube_transcript_api
-pytube
+streamlit==1.29.0
+pysqlite3-binary==0.5.2
+youtube_transcript_api==0.6.1
+pytube==15.0.0
+protobuf==3.20.0
